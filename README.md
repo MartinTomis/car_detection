@@ -12,33 +12,37 @@ Below....
 **1. Explain how (and identify where in your code) you extracted HOG features from the training images. Explain how you settled on your final choice of HOG parameters.**
 
 I leveraged the functions presented in lectures. 
-Feature extraction is performed on lines 165 and 166 for car and non-car images by function extract_features. This function calls function get_hog_features, which extracts features for the selected color channel (lines 148-150). The implementation uses all 3 channels. The parameters for adjust are the following: 
+Feature extraction is performed on lines 141 and 142 for car and non-car images by function extract_features. This function calls function get_hog_features, which extracts features for the selected color channel (lines 130-132). The implementation uses all 3 channels. The parameters for adjust are the following: 
 * pix_per_cell - this is the number of pixels per "cell" - a unit for which the gradient is calculated. It is passed as a tuple (e.g. *(8,8) means 8 x 8 pixels).
 * cell_per_block - number of cells per block. The histogram calculated for each cell may be normalized, and the cell_per_block determines the set of cells, over which the normalization is computed. 
-* orientations - this means the number of "bins", into which the gradient angles are allocated. The
+* orientations - this means the number of "bins", into which the gradient angles are allocated. 
+
 
 The training images are all 64 x 64, so separating each picture into  8 x 8 cells, each 8 x 8 pixels large, seems straightforward, and it is the same setting as done in the lecture. For cell_per_block, I go for (2,2), meaning that the normalization is performed over the area of 2 x 2 adjacent cells (and then this block is shifted by 1 cell).
 
 I set the number of orientations into 9, as done in lecture. This means that the possible 360 degree range is split into 9 bins by 40 degrees - this sounds as a reasonable level of granularity.
 
+The setting is performed in line 114-116.
 
 **2. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).**
-I used both HOG feature and color features, leveraging code from lectures. The features are extracted for both car and non-car images in lines 165 and 166, and are normalized in rows 177-182. Normalization improves numerical optimalization used by the machine learning algorithm and controls to some degree for outliers in the data.
+I used both HOG feature and color features, leveraging code from lectures. The features are extracted for both car and non-car images in lines 141 and 142, and are normalized in rows 153-157. Normalization improves numerical optimalization used by the machine learning algorithm and controls to some degree for outliers in the data.
+
+I use SVM. These are classifier which work by maximizing the distance between the boundary between 2 classes and the closes observation.
 
 I use support vector machine with a radial basis kernel. This is a linear-classifier with a "kernel trick": it allows to create a non-linear boundary to the original data, by generating additional features (simple functions of the original features) which are linearly separable. Besides the kernel specification, I used the default values for parameters "C" and "gamma", which control for the non-linearity of the boundary (after the kernel trick) and the strength of effect of observations far from the boundary, respectively. I attepted to optimize the parameters by using GridSearchCV, but the results did not seem superior to the choice of the default values, in particular on the images from the video.
 
-The training is performed on lines 199-205. Assessment of the algorithm by analyzing the accuracy (99+%) on a testing set is performed on line 209.
+The training is performed on lines 176-178. Assessment of the algorithm by analyzing the accuracy (99+%) on a testing set is performed on line 182.
 
 
 # Sliding Window Search
 
 **1.Describe how (and identify where in your code) you implemented a sliding window search. How did you decide what scales to search and how much to overlap windows?**
-I implemented the sliding window search iby function "find_cars". I modified the function from lecture slightly, so that the output is a list of the box vertices, rather than the image. 
+I implemented the sliding window search by function "find_cars". I modified the function from lecture slightly, so that the output is a list of the box vertices, rather than the image. The function is shown in lines 209-273.
+
+The basic idea of the function is that a window of selected size (original size is 64 x 64, rescaling is used - see below) slides through a part of the image, extracts smalles sub-images, and applied to them the classifier.
 
 
-
-I also defined additional inputs: xstart and xstop coordinates, number of cells per step and a list of vertices. The xstart and xstop are parameters that helped with the implementation in this given video, where the car drives on a highway and all relevant cars are on the right side of the frame, and it was very inefficient to search the left hand side, apart from a small strip for incoming traffic.
-
+Compared to the lecture, additional inputs are used: xstart and xstop coordinates, number of cells per step and a list of vertices. The xstart and xstop are parameters that helped with the implementation in this given video, where the car drives on a highway and all relevant cars are on the right side of the frame, and it was very inefficient to search the left hand side, apart from a small strip for incoming traffic.
 
 When looking for "medium" and "small" cars, i.e. cars that are either far away or in a medium distance, I slided by 1 cell. When looking for larger cars, by 2.
 
@@ -63,6 +67,8 @@ The choice for the sliding window is shown below, with comments
 
 
 **2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier?**
+Note: for images, please see section on video implementation.
+
 The classifier performance is very good on the test data sampled from the data used for training. 
 
 However, my biggest concern was how the classifier generalized on the images from the video. Moreover, the "car detector" should identify the car if only a part of the car appears, rather than the whole car. 
