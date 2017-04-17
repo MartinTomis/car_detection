@@ -54,7 +54,7 @@ The choice for the sliding window is shown below, with comments
     #large near cars
     boxes_to_draw = find_cars(image, 400, 656, 1024, 1280, 3, svc1, X_scaler1, 9, 8, 2, 2, (32, 32), 32, boxes_to_draw)
 
-**2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier? **
+**2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier?**
 The classifier performance is very good on the test data sampled from the data used for training. 
 
 However, my biggest concern was how the classifier generalized on the images from the video. Moreover, the "car detector" should identify the car if only a part of the car appears, rather than the whole car. 
@@ -77,11 +77,11 @@ The code hence does not use the extra images created by cropping and resizing, t
 
 # Video Implementation
 
-**1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.) **
+**1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)**
 
 Here's a [link to my video result](https://github.com/MartinTomis/Lane_detection/blob/master/video.mp4)
 
-**2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes. **
+**2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.**
 
 I implemented a filter for false positives based on the example in lectures. Function "add_heat" takes as input the list of boxes and adds value of 1 for each pixel within the boxes. Where the overal value is below or equal to certain threshold, the values is set to 0.
 
