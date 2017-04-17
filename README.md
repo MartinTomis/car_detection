@@ -49,6 +49,8 @@ In an effort to improve this, I tried to train the classifier on more images, so
         non_car_list.extend([img, img1, img2])
 ```
 
+It did improve something... 
+
 # Video Implementation
 
 **1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.) **
