@@ -40,7 +40,7 @@ I also defined additional inputs: xstart and xstop coordinates, number of cells 
 
 When looking for "medium" and "small" cars, i.e. cars that are either far away or in a medium distance, I slided by 1 cell. When looking for larger cars, by 2.
 
-
+The last new input is the list of the box vertices, to which new vertices are appendend, if cars are found. I did this, so that multiple dimensions of the sliding windows may be used. 
 
 The choice for the sliding window is shown below, with comments
 
@@ -78,38 +78,22 @@ The code hence does not use the extra images created by cropping and resizing, t
 # Video Implementation
 
 **1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.) **
-dsdsd
+
+Here's a [link to my video result](https://github.com/MartinTomis/Lane_detection/blob/master/video.mp4)
 
 **2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes. **
+
+I implemented a filter for false positives based on the example in lectures. Function "add_heat" takes as input the list of boxes and adds value of 1 for each pixel within the boxes. Where the overal value is below or equal to certain threshold, the values is set to 0.
+
+Besides false positives, a problem are true negatives, i.e. cases where what should be a car is not identified as one.
+
+I dealt with these 2 problems in the folowing manner:
+* The threshold in add_heat is set to 1. This essentially means that I draw a box if classify the image as a car, i.e. the value of 1 does not really prevent false positives. Given how I restricted the sliding window only to the region where the cars are in the video, this was sufficient, but I would use higher threshold for a different setting.
+* To avoid true negatives, I combine the current image with 3 previous images (where available) to create heatmap. I was considering multiple options. Ideally, I would want to assign a lower weight to more distant images. However, the values we are potentially dealing with may be low integers, quite potentially 0s and 1s. I hence simply add the heatmatps for the 3 previous images, withoug any more advanced weighting. 
 
 # Discussion
 
 **1. Briefly discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail? What could you do to make it more robust?**
 
-Creating a great writeup:
----
-A great writeup should include the rubric points as well as your description of how you addressed each point.  You should include a detailed description of the code used in each step (with line-number references and code snippets where necessary), and links to other supporting documents or external references.  You should include images in your writeup to demonstrate how your code works with examples.  
-
-All that said, please be concise!  We're not looking for you to write a book here, just a brief description of how you passed each rubric point, and references to the relevant code :). 
-
-You can submit your writeup in markdown or use another method and submit a pdf instead.
-
-The Project
----
-
-The goals / steps of this project are the following:
-
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-* Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
-* Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
-* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
-* Estimate a bounding box for vehicles detected.
-
-Here are links to the labeled data for [vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/vehicles.zip) and [non-vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/non-vehicles.zip) examples to train your classifier.  These example images come from a combination of the [GTI vehicle image database](http://www.gti.ssr.upm.es/data/Vehicle_database.html), the [KITTI vision benchmark suite](http://www.cvlibs.net/datasets/kitti/), and examples extracted from the project video itself.   You are welcome and encouraged to take advantage of the recently released [Udacity labeled dataset](https://github.com/udacity/self-driving-car/tree/master/annotations) to augment your training data.  
-
-Some example images for testing your pipeline on single frames are located in the `test_images` folder.  To help the reviewer examine your work, please save examples of the output from each stage of your pipeline in the folder called `ouput_images`, and include them in your writeup for the project by describing what each image shows.    The video called `project_video.mp4` is the video your pipeline should work well on.  
-
-**As an optional challenge** Once you have a working pipeline for vehicle detection, add in your lane-finding algorithm from the last project to do simultaneous lane-finding and vehicle detection!
-
-**If you're feeling ambitious** (also totally optional though), don't stop there!  We encourage you to go out and take video of your own, and show us how you would implement this project on a new video!
+* Speed of prediction. It is by far the biggest problem. I think that unless the cars can be detected in less than 1/10 sec, the "car detector" is not working properly. I tried "multiprocessing" python library, but could not get it running, and did not attempt parallelization further. Once speeded up, more granular search over larger area could be implemented, highlighting incoming cars or using classifier trained even on the cropped training images.
+* I had more problems with true negatives than false positives. To avoid true negatives, it makes sense to use information from previous images. However, my implementation leads to certain "lag", drawing the box also over images where the car was recently. This could be done by adjusting the information from the previous images - ideally by shifting them by few pixels in the direction inferred from the difference between our speed and the other car speed.
