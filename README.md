@@ -96,6 +96,13 @@ I dealt with these 2 problems in the folowing manner:
         heatmap1 = add_heat(result.shape, box_list[-2], 1)
         heatmap2 = add_heat(result.shape, box_list[-3], 1)
         heatmap3 = add_heat(result.shape, box_list[-4], 1)
+   
+ The disadvantage of this approach, is that if the position of the car in from of the camera is changing, then 
+
+I combine overlapping bounding boxes by using the label and draw_labeled_bboxes functions. Both were shown in the lectures.
+The label function takes the output of the add_heat function, and identifies multiple clusters in the data, and draw_labeled_bboxes
+
+
 
 # Discussion
 
