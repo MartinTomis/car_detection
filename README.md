@@ -40,7 +40,7 @@ The classifier performance is very good on the test data sampled from the data u
 
 However, my biggest concern was how the classifier generalized on the images from the video. Moreover, the "car detector" should identify the car if only a part of the car appears, rather than the whole car. 
 
-In an effort to improve this, I tried to train the classifier on more images, sourced from cropping the training images. The idea is that this would ideally allow the classifier to recognize as a "car" only e.g. the first half of a car. I used the following code (mostly commented out in the final code - lines 43-49 and 57-63) following:
+In an effort to improve this, I tried to train the classifier on more images, sourced from cropping and then resizing the training images. The idea is that this would ideally allow the classifier to recognize as a "car" only e.g. the first half of a car. I used the following code (mostly commented out in the final code - lines 43-49 and 57-63) following:
 
 ```python
         img=mpimg.imread("non-vehicles/" + dir + "/" + image_name)
@@ -49,7 +49,16 @@ In an effort to improve this, I tried to train the classifier on more images, so
         non_car_list.extend([img, img1, img2])
 ```
 
-It did improve something... 
+It did improve something... For example, the code was able to recognize the car before it all appeared in the frame:
+![alt tag](https://github.com/MartinTomis/car_detection/blob/master/car_part.png)
+
+However, there were some downsides to this as well. The prediction of the images was very slow (I found this quite surprising, as the number of feature extracted from each image before training was the same). More importantly, lead to a high number of "true-negatives", i.e. case where a car was not recognized. I however think that this could be remediated by more "granular" sliding window. However, given the time it took to predict, more granual sliding was not feasible option for me, without substantially changing the code (parallelization would probablu have to be necessary).
+
+I hence used the input images without cropping.
+
+
+
+
 
 # Video Implementation
 
