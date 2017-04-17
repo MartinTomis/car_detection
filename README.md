@@ -36,7 +36,11 @@ The training is performed on lines 199-205. Assessment of the algorithm by analy
 sdsdds
 
 **2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier? **
-The classifier performance is very good on the test data sampled from the data used for training. To improve the generalization of the data from the video, I tried the following:
+The classifier performance is very good on the test data sampled from the data used for training. 
+
+However, my biggest concern was how the classifier generalized on the images from the video. Moreover, the "car detector" should identify the car if only a part of the car appears, rather than the whole car. 
+
+In an effort to improve this, I tried to train the classifier on more images, sourced from cropping the training images. The idea is that this would ideally allow the classifier to recognize as a "car" only e.g. the first half of a car. I used the following code (mostly commented out in the final code - lines 43-49 and 57-63) following:
 
 ```python
         img=mpimg.imread("non-vehicles/" + dir + "/" + image_name)
