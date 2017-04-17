@@ -58,7 +58,7 @@ The choice for the sliding window is shown below, with comments
     
   
   Below is an example of bands over which the search may be performed. Please note that the height of each rectangle reflects the height of the image which is searched, not the height of the region over which the window is sliding  - this means that the window may e.g. slide downwards.
-  ![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_1%20-%20Copy.png)
+  ![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_2.png)
 
 
 
@@ -95,7 +95,7 @@ I implemented a filter for false positives based on the example in lectures. Fun
 
 Output of the add_heat function is shown below for the image presented on the section on sliding windows.
 
-
+![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_image_heat1.png)
 
 Besides false positives, a problem are true negatives, i.e. cases where what should be a car is not identified as one.
 
@@ -112,7 +112,15 @@ I dealt with these 2 problems in the folowing manner:
  The disadvantage of this approach, is that if the position of the car in from of the camera is changing, then 
 
 I combine overlapping bounding boxes by using the label and draw_labeled_bboxes functions. Both were shown in the lectures.
-The label function takes the output of the add_heat function, and identifies multiple clusters in the data, and draw_labeled_bboxes
+The label function takes the output of the add_heat function, and identifies multiple clusters in the data. 
+
+![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_image_labels1.png)
+
+
+draw_labeled_bboxes then identified the largest and smalles x and y coordinates, and creates a rectangles with vertices in the extreme x and y values. These rectables are then drawn over the original image.
+
+
+![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_image1.png)
 
 
 
