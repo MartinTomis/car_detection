@@ -22,7 +22,7 @@ The training images are all 64 x 64, so separating each picture into  8 x 8 cell
 I set the number of orientations into 9, as done in lecture. This means that the possible 360 degree range is split into 9 bins by 40 degrees - this sounds as a reasonable level of granularity.
 
 
-**1. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).**
+**2. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).**
 I used both HOG feature and color features, leveraging code from lectures. The features are extracted for both car and non-car images in lines 165 and 166, and are normalized in rows 177-182. Normalization improves numerical optimalization used by the machine learning algorithm and controls to some degree for outliers in the data.
 
 I use support vector machine with a radial basis kernel. This is a linear-classifier with a "kernel trick": it allows to create a non-linear boundary to the original data, by generating additional features (simple functions of the original features) which are linearly separable. Besides the kernel specification, I used the default values for parameters "C" and "gamma", which control for the non-linearity of the boundary (after the kernel trick) and the strength of effect of observations far from the boundary, respectively. I attepted to optimize the parameters by using GridSearchCV, but the results did not seem superior to the choice of the default values, in particular on the images from the video.
@@ -90,6 +90,12 @@ Besides false positives, a problem are true negatives, i.e. cases where what sho
 I dealt with these 2 problems in the folowing manner:
 * The threshold in add_heat is set to 1. This essentially means that I draw a box if classify the image as a car, i.e. the value of 1 does not really prevent false positives. Given how I restricted the sliding window only to the region where the cars are in the video, this was sufficient, but I would use higher threshold for a different setting.
 * To avoid true negatives, I combine the current image with 3 previous images (where available) to create heatmap. I was considering multiple options. Ideally, I would want to assign a lower weight to more distant images. However, the values we are potentially dealing with may be low integers, quite potentially 0s and 1s. I hence simply add the heatmatps for the 3 previous images, withoug any more advanced weighting. 
+
+    heatmap=add_heat(result.shape, boxes_to_draw, 1)
+    if len(box_list)>3:
+        heatmap1 = add_heat(result.shape, box_list[-2], 1)
+        heatmap2 = add_heat(result.shape, box_list[-3], 1)
+        heatmap3 = add_heat(result.shape, box_list[-4], 1)
 
 # Discussion
 
