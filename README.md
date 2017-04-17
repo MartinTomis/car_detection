@@ -35,6 +35,8 @@ The training is performed on lines 199-205. Assessment of the algorithm by analy
 **1.Describe how (and identify where in your code) you implemented a sliding window search. How did you decide what scales to search and how much to overlap windows?**
 I implemented the sliding window search iby function "find_cars". I modified the function from lecture slightly, so that the output is a list of the box vertices, rather than the image. 
 
+
+
 I also defined additional inputs: xstart and xstop coordinates, number of cells per step and a list of vertices. The xstart and xstop are parameters that helped with the implementation in this given video, where the car drives on a highway and all relevant cars are on the right side of the frame, and it was very inefficient to search the left hand side, apart from a small strip for incoming traffic.
 
 
@@ -53,6 +55,12 @@ The choice for the sliding window is shown below, with comments
 
     #large near cars
     boxes_to_draw = find_cars(image, 400, 656, 1024, 1280, 3, svc1, X_scaler1, 9, 8, 2, 2, (32, 32), 32, boxes_to_draw)
+    
+  
+  Below is 
+  ![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_1.png)
+
+
 
 **2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier?**
 The classifier performance is very good on the test data sampled from the data used for training. 
