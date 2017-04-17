@@ -57,8 +57,8 @@ The choice for the sliding window is shown below, with comments
     boxes_to_draw = find_cars(image, 400, 656, 1024, 1280, 3, svc1, X_scaler1, 9, 8, 2, 2, (32, 32), 32, boxes_to_draw)
     
   
-  Below is 
-  ![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_1.png)
+  Below is an example of bands over which the search may be performed. Please note that the height of each rectangle reflects the height of the image which is searched, not the height of the region over which the window is sliding  - this means that the window may e.g. slide downwards.
+  ![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_1%20-%20Copy.png)
 
 
 
@@ -77,7 +77,7 @@ In an effort to improve this, I tried to train the classifier on more images, so
 ```
 
 It did improve something... For example, the code was able to recognize the car before it all appeared in the frame:
-![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_1%20-%20Copy.png)
+![alt tag](https://github.com/MartinTomis/car_detection/blob/master/car_part.png)
 
 However, there were some downsides to this as well. The prediction of the images was very slow (I found this quite surprising, as the number of feature extracted from each image before training was the same). More importantly, lead to a high number of "true-negatives", i.e. case where a car was not recognized. I however think that this could be remediated by more "granular" sliding window. However, given the time it took to predict, more granual sliding was not feasible option for me, without substantially changing the code (parallelization would probablu have to be necessary).
 
@@ -92,6 +92,10 @@ Here's a [link to my video result](https://github.com/MartinTomis/Lane_detection
 **2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.**
 
 I implemented a filter for false positives based on the example in lectures. Function "add_heat" takes as input the list of boxes and adds value of 1 for each pixel within the boxes. Where the overal value is below or equal to certain threshold, the values is set to 0.
+
+Output of the add_heat function is shown below for the image presented on the section on sliding windows.
+
+
 
 Besides false positives, a problem are true negatives, i.e. cases where what should be a car is not identified as one.
 
