@@ -35,12 +35,19 @@ The training is performed on lines 199-205. Assessment of the algorithm by analy
 **1.Describe how (and identify where in your code) you implemented a sliding window search. How did you decide what scales to search and how much to overlap windows?**
 I implemented the sliding window search iby function "find_cars". I modified the function from lecture slightly, so that the output is a list of the box vertices, rather than the image. 
 
-I also defined additional inputs: xstart and xstop coordinates and a list of vertices. The xstart and xstop are parameters that helped with the implementation in this given video, where the car drives on a highway and all relevant cars are on the right side of the frame, and it was very inefficient to search the left hand side, apart from a small strip for incoming traffic. 
+I also defined additional inputs: xstart and xstop coordinates, number of cells per step and a list of vertices. The xstart and xstop are parameters that helped with the implementation in this given video, where the car drives on a highway and all relevant cars are on the right side of the frame, and it was very inefficient to search the left hand side, apart from a small strip for incoming traffic.
 
-    #small cars ahead
+
+When looking for "medium" and "small" cars, i.e. cars that are either far away or in a medium distance, I slided by 1 cell. When looking for larger cars, by 2.
+
+
+
+The choice for the sliding window is shown below, with comments
+
+    #small cars ahead - very granular search, for cars fitting roughly into "64 x 64 box"
     boxes_to_draw = find_cars(image, 396, 492, 720, 1000, 1, svc1, X_scaler1, 9, 8, 2, 1, (32, 32), 32, boxes_to_draw)
 
-    # search for mid-
+    # search for mid-sized cars: The algorithm looks for cars images of roughly 96 x 96 dimensions (closer to center) or cca 128 x 128 -    farther from center
     boxes_to_draw = find_cars(image, 400, 528, 800, 1104, 1.5, svc1, X_scaler1, 9, 8, 2, 1, (32, 32), 32, boxes_to_draw)
     boxes_to_draw = find_cars(image, 400, 560, 976, 1280, 2, svc1, X_scaler1, 9, 8, 2, 1, (32, 32), 32, boxes_to_draw)
 
