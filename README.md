@@ -22,15 +22,13 @@ The training images are all 64 x 64, so separating each picture into  8 x 8 cell
 I set the number of orientations into 9, as done in lecture. This means that the possible 360 degree range is split into 9 bins by 40 degrees - this sounds as a reasonable level of granularity.
 
 
+**1. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).**
+I used both HOG feature and color features, leveraging code from lectures. The features are extracted for both car and non-car images in lines 165 and 166, and are normalized in rows 177-182. Normalization improves numerical optimalization used by the machine learning algorithm and controls to some degree for outliers in the data.
 
+I use support vector machine with a radial basis kernel. This is a linear-classifier with a "kernel trick": it allows to create a non-linear boundary to the original data, by generating additional features (simple functions of the original features) which are linearly separable. Besides the kernel specification, I used the default values for parameters "C" and "gamma", which control for the non-linearity of the boundary (after the kernel trick) and the strength of effect of observations far from the boundary, respectively. I attepted to optimize the parameters by using GridSearchCV, but the results did not seem superior to the choice of the default values, in particular on the images from the video.
 
+The training is performed on lines 199-205. Assessment of the algorithm by analyzing the accuracy (99+%) on a testing set is performed on line 209.
 
-
-
-I 
-
-**Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).**
-dsds
 
 # Sliding Window Search
 
@@ -38,8 +36,14 @@ dsds
 sdsdds
 
 **2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier? **
-dsdds
+The classifier performance is very good on the test data sampled from the data used for training. To improve the generalization of the data from the video, I tried the following:
 
+```python
+        img=mpimg.imread("non-vehicles/" + dir + "/" + image_name)
+        img1=cv2.resize(img[0:40, 0:40,:], (64,64))#img[0:40, 0:40].resize() #cv2.resize(img[:, :, 0], size)
+        img2 = cv2.resize(img[23:63, 23:63,:], (64, 64))
+        non_car_list.extend([img, img1, img2])
+```
 
 # Video Implementation
 
