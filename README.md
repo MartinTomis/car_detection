@@ -67,6 +67,7 @@ The choice for the sliding window is shown below, with comments
 
 
 **2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier?**
+
 Note: for images, please see section on video implementation.
 
 The classifier performance is very good on the test data sampled from the data used for training. 
