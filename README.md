@@ -2,22 +2,42 @@
 
 In this project, your goal is to write a software pipeline to detect vehicles in a video (start with the test_video.mp4 and later implement on full project_video.mp4), but the main output or product we want you to create is a detailed writeup of the project.  Check out the [writeup template](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup. 
 
-# Histogram of Oriented Gradients (HOG)
+# README
 
 **1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. Here is a template writeup for this project you can use as a guide and a starting point.**
 
-ddsdssd
+Below....
+
+# Histogram of Oriented Gradients (HOG)
+**1. Explain how (and identify where in your code) you extracted HOG features from the training images. Explain how you settled on your final choice of HOG parameters.**
+
+I leveraged the functions presented in lectures. 
+Feature extraction is performed on lines 165 and 166 for car and non-car images by function extract_features. This function calls function get_hog_features, which extracts features for the selected color channel (lines 148-150). The implementation uses all 3 channels. The parameters for adjust are the following: 
+* pix_per_cell - this is the number of pixels per "cell" - a unit for which the gradient is calculated. It is passed as a tuple (e.g. *(8,8) means 8 x 8 pixels).
+* cell_per_block - number of cells per block. The histogram calculated for each cell may be normalized, and the cell_per_block determines the set of cells, over which the normalization is computed. 
+* orientations - this means the number of "bins", into which the gradient angles are allocated. The
+
+The training images are all 64 x 64, so separating each picture into  8 x 8 cells, each 8 x 8 pixels large, seems straightforward, and it is the same setting as done in the lecture. For cell_per_block, I go for (2,2), meaning that the normalization is performed over the area of 2 x 2 adjacent cells (and then this block is shifted by 1 cell).
+
+I set the number of orientations into 9, as done in lecture. This means that the possible 360 degree range is split into 9 bins by 40 degrees - this sounds as a reasonable level of granularity.
 
 
-**2. Explain how (and identify where in your code) you extracted HOG features from the training images. Explain how you settled on your final choice of HOG parameters.**
+
+
+
+
+
+I 
+
+**Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).**
 dsds
 
 # Sliding Window Search
 
-** 1.Describe how (and identify where in your code) you implemented a sliding window search. How did you decide what scales to search and how much to overlap windows?**
+**1.Describe how (and identify where in your code) you implemented a sliding window search. How did you decide what scales to search and how much to overlap windows?**
 sdsdds
 
-** 2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier? **
+**2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier? **
 dsdds
 
 
