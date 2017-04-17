@@ -33,7 +33,19 @@ The training is performed on lines 199-205. Assessment of the algorithm by analy
 # Sliding Window Search
 
 **1.Describe how (and identify where in your code) you implemented a sliding window search. How did you decide what scales to search and how much to overlap windows?**
-sdsdds
+I implemented the sliding window search iby function "find_cars". I modified the function from lecture slightly, so that the output is a list of the box vertices, rather than the image. 
+
+I also defined additional inputs: xstart and xstop coordinates and a list of vertices. The xstart and xstop are parameters that helped with the implementation in this given video, where the car drives on a highway and all relevant cars are on the right side of the frame, and it was very inefficient to search the left hand side, apart from a small strip for incoming traffic. 
+
+    #small cars ahead
+    boxes_to_draw = find_cars(image, 396, 492, 720, 1000, 1, svc1, X_scaler1, 9, 8, 2, 1, (32, 32), 32, boxes_to_draw)
+
+    # search for mid-
+    boxes_to_draw = find_cars(image, 400, 528, 800, 1104, 1.5, svc1, X_scaler1, 9, 8, 2, 1, (32, 32), 32, boxes_to_draw)
+    boxes_to_draw = find_cars(image, 400, 560, 976, 1280, 2, svc1, X_scaler1, 9, 8, 2, 1, (32, 32), 32, boxes_to_draw)
+
+    #large near cars
+    boxes_to_draw = find_cars(image, 400, 656, 1024, 1280, 3, svc1, X_scaler1, 9, 8, 2, 2, (32, 32), 32, boxes_to_draw)
 
 **2. Show some examples of test images to demonstrate how your pipeline is working. How did you optimize the performance of your classifier? **
 The classifier performance is very good on the test data sampled from the data used for training. 
@@ -54,11 +66,7 @@ It did improve something... For example, the code was able to recognize the car 
 
 However, there were some downsides to this as well. The prediction of the images was very slow (I found this quite surprising, as the number of feature extracted from each image before training was the same). More importantly, lead to a high number of "true-negatives", i.e. case where a car was not recognized. I however think that this could be remediated by more "granular" sliding window. However, given the time it took to predict, more granual sliding was not feasible option for me, without substantially changing the code (parallelization would probablu have to be necessary).
 
-I hence used the input images without cropping.
-
-
-
-
+The code hence does not use the extra images created by cropping and resizing, though I think the idea is not bad.
 
 # Video Implementation
 
