@@ -77,7 +77,7 @@ In an effort to improve this, I tried to train the classifier on more images, so
 ```
 
 It did improve something... For example, the code was able to recognize the car before it all appeared in the frame:
-![alt tag](https://github.com/MartinTomis/car_detection/blob/master/car_part.png)
+![alt tag](https://github.com/MartinTomis/car_detection/blob/master/test_1%20-%20Copy.png)
 
 However, there were some downsides to this as well. The prediction of the images was very slow (I found this quite surprising, as the number of feature extracted from each image before training was the same). More importantly, lead to a high number of "true-negatives", i.e. case where a car was not recognized. I however think that this could be remediated by more "granular" sliding window. However, given the time it took to predict, more granual sliding was not feasible option for me, without substantially changing the code (parallelization would probablu have to be necessary).
 
